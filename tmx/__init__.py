@@ -178,14 +178,19 @@ class TileMap(object):
         self.layers = []
 
     @classmethod
-    def load(cls, fname):
+    def load(cls, fname, fileobj=None):
         """
         Load the TMX file with the indicated name and return a
-        :class:`TileMap` object representing it.
+        :class:`TileMap` object representing it. If a file descriptor
+        object is passed in the optional `fileobj` parameter, it will
+        be used to load the TMX file, but fname still needs to be specified.
         """
         self = cls()
 
-        tree = ET.parse(fname)
+        if not fileobj:
+            tree = ET.parse(fname)
+        else:
+            tree = ET.parse(fileobj)
         root = tree.getroot()
         fd = os.path.dirname(fname)
         self.version = root.attrib.get("version", self.version)
